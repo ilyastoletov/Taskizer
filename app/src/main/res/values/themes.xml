@@ -2,6 +2,7 @@
 
     <style name="Theme.Taskizer" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/green_default</item>
+        <item name="android:statusBarColor">@color/green_default</item>
     </style>
 
     <style name="Theme.Taskizer.NoActionBar">
