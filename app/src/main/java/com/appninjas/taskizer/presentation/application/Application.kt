@@ -1,6 +1,7 @@
 package com.appninjas.taskizer.presentation.application
 
 import android.app.Application
+import com.appninjas.taskizer.presentation.di.appModule
 import com.appninjas.taskizer.presentation.di.dataModule
 import com.appninjas.taskizer.presentation.di.domainModule
 import org.koin.android.ext.koin.androidContext
@@ -17,7 +18,8 @@ class Application: Application() {
             androidContext(this@Application)
             modules(listOf(
                 dataModule,
-                domainModule
+                domainModule,
+                appModule
             ))
         }
     }
