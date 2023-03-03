@@ -2,8 +2,9 @@ package com.appninjas.taskizer.presentation.activities
 
 import android.content.DialogInterface
 import android.os.Bundle
+import kotlin.random.Random
+import android.text.SpannableStringBuilder
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var taskAdapter: TaskAdapter
     private val viewModel by viewModel<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,36 +32,56 @@ class MainActivity : AppCompatActivity() {
         val sdf = SimpleDateFormat("HH")
         val currentTime = sdf.format(Date())
         binding.greetingText.text = getTime(currentTime)
-        updateTasksRv()
         binding.addTaskBtn.setOnClickListener {
-            newTaskDialog()
+            taskInteractionDialog(editing = false, model = null)
         }
-
-    }
-
-    private fun updateTasksRv() {
+        taskAdapter = TaskAdapter(listOf(), editTaskListener)
+        binding.tasksMainRv.apply {
+            adapter = taskAdapter
+            layoutManager = LinearLayoutManager(this@MainActivity)
+        }
         viewModel.getTasksList()
-        viewModel.taskList.observe(this@MainActivity) {tasks ->
-            val taskAdapter = TaskAdapter(tasks)
-            binding.tasksMainRv.apply {
-                adapter = taskAdapter
-                layoutManager = LinearLayoutManager(context)
-            }
+        viewModel.taskList.observe(this@MainActivity) { tasks ->
+            updateTaskRv(tasks)
         }
     }
 
-    private fun newTaskDialog() {
-        val newTaskEditText = EditText(this@MainActivity)
-        newTaskEditText.hint = "Введите текст задачи"
-        val dialogButtonListener = DialogInterface.OnClickListener { dialog, element ->
+    private val editTaskListener = object : TaskAdapter.TaskEditListener {
+        override fun onClick(model: Task) {
+            taskInteractionDialog(editing = true, defaultText = model.taskDescription, model = model)
+        }
+    }
+
+
+    private fun updateTaskRv(tasks: List<Task>) {
+        taskAdapter.changeList(tasks)
+        taskAdapter.notifyDataSetChanged()
+    }
+
+    private fun taskInteractionDialog(editing: Boolean = false, defaultText: String = "", model: Task?) {
+        val taskEditText = EditText(this@MainActivity)
+        taskEditText.text = SpannableStringBuilder(defaultText)
+        taskEditText.hint = "Введите текст задачи"
+        val listener = DialogInterface.OnClickListener { dialog, element ->
             when(element) {
                 DialogInterface.BUTTON_POSITIVE -> {
-                    val taskFieldText = newTaskEditText.text.toString()
-                    if (taskFieldText.isNotEmpty()) {
-                        viewModel.saveTask(Task(taskDescription = taskFieldText))
-                        updateTasksRv()
+                    val taskFieldText = taskEditText.text.toString()
+                    if (editing) {
+                        viewModel.editTask(Task(
+                            taskId = model!!.taskId,
+                            taskDescription = taskFieldText,
+                            taskStatus = model!!.taskStatus
+                        ))
                     } else {
-                        Toast.makeText(this@MainActivity, "Ошибка. Отсутствует текст задачи", Toast.LENGTH_SHORT).show()
+                        viewModel.saveTask(Task(
+                            taskId = Random.nextInt(),
+                            taskDescription = taskFieldText,
+                            taskStatus = false
+                        ))
+                    }
+                    viewModel.getTasksList()
+                    viewModel.taskList.observe(this@MainActivity) {tasks ->
+                        updateTaskRv(tasks)
                     }
                 }
                 DialogInterface.BUTTON_NEGATIVE -> dialog.cancel()
@@ -67,10 +89,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         val dialog = AlertDialog.Builder(this@MainActivity)
-            .setTitle("Новая задача")
-            .setView(newTaskEditText)
-            .setPositiveButton("Добавить", dialogButtonListener)
-            .setNegativeButton("Отмена", dialogButtonListener)
+            .setTitle(when(editing) {
+                true -> "Изменение задачи"
+                false -> "Новая задача"
+            })
+            .setView(taskEditText)
+            .setPositiveButton("Добавить", listener)
+            .setNegativeButton("Отмена", listener)
             .setCancelable(true)
 
         dialog.show()
@@ -83,5 +108,4 @@ class MainActivity : AppCompatActivity() {
         in 0..6 -> "Доброй ночи"
         else -> "Приятного дня"
     }
-
 }

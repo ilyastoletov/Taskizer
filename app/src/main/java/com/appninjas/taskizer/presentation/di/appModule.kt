@@ -8,7 +8,9 @@ val appModule = module {
     viewModel {
         MainViewModel(
             saveTaskUseCase = get(),
-            getTasksUseCase = get()
+            getTasksUseCase = get(),
+            editTaskUseCase = get(),
+            deleteTaskUseCase = get()
         )
     }
 }

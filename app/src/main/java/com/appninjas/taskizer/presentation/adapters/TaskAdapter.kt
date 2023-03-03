@@ -7,11 +7,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.appninjas.domain.model.Task
 import com.appninjas.taskizer.databinding.TaskItemBinding
 
-class TaskAdapter(private val tasksList: List<Task>): RecyclerView.Adapter<TaskAdapter.Holder>() {
+class TaskAdapter(private var tasksList: List<Task>,
+                  private val listener: TaskEditListener): RecyclerView.Adapter<TaskAdapter.Holder>() {
 
     inner class Holder(private val binding: TaskItemBinding, itemView: View): RecyclerView.ViewHolder(itemView) {
         fun bind(model: Task) {
-            binding.taskDescriptionText.text = model.taskDescription
+            with(binding) {
+                taskDescriptionText.text = model.taskDescription
+                editTaskBtn.setOnClickListener {
+                    listener.onClick(model)
+                }
+            }
         }
     }
 
@@ -24,6 +30,15 @@ class TaskAdapter(private val tasksList: List<Task>): RecyclerView.Adapter<TaskA
         holder.bind(tasksList[position])
     }
 
+    fun changeList(newList: List<Task>) {
+        tasksList = newList
+        notifyDataSetChanged()
+    }
+
     override fun getItemCount(): Int = tasksList.size
+
+    interface TaskEditListener {
+        fun onClick(model: Task)
+    }
 
 }

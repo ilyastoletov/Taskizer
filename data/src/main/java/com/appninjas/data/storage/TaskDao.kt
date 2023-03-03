@@ -1,9 +1,6 @@
 package com.appninjas.data.storage
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.appninjas.domain.model.Task
 
 @Dao
@@ -14,5 +11,11 @@ interface TaskDao {
 
     @Query("SELECT * FROM tasks")
     suspend fun getTasksList(): List<TaskDbModel>
+
+    @Update(entity = TaskDbModel::class, onConflict = OnConflictStrategy.IGNORE)
+    suspend fun updateTask(task: TaskDbModel)
+
+    @Delete(entity = TaskDbModel::class)
+    suspend fun deleteTask(task: TaskDbModel)
 
 }

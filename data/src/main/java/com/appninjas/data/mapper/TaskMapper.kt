@@ -2,18 +2,19 @@ package com.appninjas.data.mapper
 
 import com.appninjas.data.storage.TaskDbModel
 import com.appninjas.domain.model.Task
-import kotlin.random.Random
 
 class TaskMapper {
 
     fun modelToDbModel(taskModel: Task): TaskDbModel = TaskDbModel(
-        taskId = Random.nextInt(),
+        taskId = taskModel.taskId,
         taskDescription = taskModel.taskDescription,
-        taskStatus = false
+        taskStatus = taskModel.taskStatus
     )
 
     fun dbModelToTaskList(dbModel: List<TaskDbModel>): List<Task> = dbModel.map { dbTask -> Task(
-        taskDescription = dbTask.taskDescription
+        taskId = dbTask.taskId,
+        taskDescription = dbTask.taskDescription,
+        taskStatus = dbTask.taskStatus
     ) }
 
 }

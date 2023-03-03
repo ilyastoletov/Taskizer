@@ -5,4 +5,5 @@
     <color name="green_default">#2FAC3C</color>
     <color name="grey_text">#989898</color>
     <color name="dark_grey_text">#3F3F3F</color>
+    <color name="card_color">#339923</color>
 </resources>
