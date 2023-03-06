@@ -19,8 +19,8 @@ class MainViewModel(
     private val deleteTaskUseCase: DeleteTaskUseCase
 ): ViewModel() {
 
-    private val _taskList: MutableLiveData<List<Task>> = MutableLiveData()
-    val taskList: LiveData<List<Task>> = _taskList
+    private val _taskList: MutableLiveData<ArrayList<Task>> = MutableLiveData()
+    val taskList: LiveData<ArrayList<Task>> = _taskList
 
     fun saveTask(task: Task) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -35,9 +35,9 @@ class MainViewModel(
         }
     }
 
-    fun editTask(task: Task) {
+    fun editTask(model: Task) {
         viewModelScope.launch(Dispatchers.IO) {
-            editTaskUseCase.invoke(task)
+            editTaskUseCase.invoke(model)
         }
     }
 

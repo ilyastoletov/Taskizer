@@ -11,10 +11,10 @@ class TaskMapper {
         taskStatus = taskModel.taskStatus
     )
 
-    fun dbModelToTaskList(dbModel: List<TaskDbModel>): List<Task> = dbModel.map { dbTask -> Task(
+    fun dbModelToTaskList(dbModel: List<TaskDbModel>): ArrayList<Task> = dbModel.map { dbTask -> Task(
         taskId = dbTask.taskId,
         taskDescription = dbTask.taskDescription,
         taskStatus = dbTask.taskStatus
-    ) }
+    ) }.toCollection(ArrayList())
 
 }

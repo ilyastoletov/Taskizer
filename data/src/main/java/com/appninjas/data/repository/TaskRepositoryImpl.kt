@@ -13,17 +13,16 @@ class TaskRepositoryImpl(private val taskDao: TaskDao,
         taskDao.saveTask(mapper.modelToDbModel(task))
     }
 
-    override suspend fun getTasks(): List<Task> {
+    override suspend fun getTasks(): ArrayList<Task> {
         val dbTaskList = taskDao.getTasksList()
         return mapper.dbModelToTaskList(dbTaskList)
     }
 
-    override suspend fun updateTask(task: Task) {
-        if (task.taskDescription == "") return
-        taskDao.updateTask(mapper.modelToDbModel(task))
-    }
-
     override suspend fun deleteTask(task: Task) {
         taskDao.deleteTask(mapper.modelToDbModel(task))
+    }
+
+    override suspend fun editTask(model: Task) {
+        taskDao.updateTask(mapper.modelToDbModel(model))
     }
 }
