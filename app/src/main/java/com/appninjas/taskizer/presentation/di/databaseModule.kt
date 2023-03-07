@@ -8,7 +8,7 @@ import com.appninjas.data.storage.TaskDatabase
 import com.appninjas.domain.repository.TaskRepository
 import org.koin.dsl.module
 
-val dataModule = module {
+val databaseModule = module {
     single<TaskRepository> {
         TaskRepositoryImpl(
             taskDao = get(),

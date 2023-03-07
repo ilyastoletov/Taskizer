@@ -50,6 +50,7 @@
                     android:src="@drawable/baseline_attach_money_24"/>
 
                 <TextView
+                    android:id="@+id/dollar_course_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="61.23"
@@ -70,6 +71,7 @@
                     android:src="@drawable/baseline_euro_24"/>
 
                 <TextView
+                    android:id="@+id/euro_course_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="3dp"
@@ -113,7 +115,7 @@
                 android:layout_width="match_parent"
                 android:textColor="@color/black"
                 android:inputType="text"
-                android:hint="fidjfi"
+                android:backgroundTint="@color/black"
                 android:layout_height="40dp"
                 android:layout_marginTop="3dp"
                 android:layout_marginStart="5dp"

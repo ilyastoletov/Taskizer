@@ -10,7 +10,8 @@ val appModule = module {
             saveTaskUseCase = get(),
             getTasksUseCase = get(),
             editTaskUseCase = get(),
-            deleteTaskUseCase = get()
+            deleteTaskUseCase = get(),
+            getMoneyCourseUseCase = get()
         )
     }
 }

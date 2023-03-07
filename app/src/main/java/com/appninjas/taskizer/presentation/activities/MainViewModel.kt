@@ -4,11 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.appninjas.domain.model.Money
 import com.appninjas.domain.model.Task
-import com.appninjas.domain.usecase.DeleteTaskUseCase
-import com.appninjas.domain.usecase.EditTaskUseCase
-import com.appninjas.domain.usecase.GetTasksUseCase
-import com.appninjas.domain.usecase.SaveTaskUseCase
+import com.appninjas.domain.usecase.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -16,11 +14,15 @@ class MainViewModel(
     private val saveTaskUseCase: SaveTaskUseCase,
     private val getTasksUseCase: GetTasksUseCase,
     private val editTaskUseCase: EditTaskUseCase,
-    private val deleteTaskUseCase: DeleteTaskUseCase
+    private val deleteTaskUseCase: DeleteTaskUseCase,
+    private val getMoneyCourseUseCase: GetMoneyCourseUseCase
 ): ViewModel() {
 
     private val _taskList: MutableLiveData<ArrayList<Task>> = MutableLiveData()
     val taskList: LiveData<ArrayList<Task>> = _taskList
+
+    private val _moneyCourse: MutableLiveData<Map<String, Money>> = MutableLiveData()
+    val moneyCourse: LiveData<Map<String, Money>> = _moneyCourse
 
     fun saveTask(task: Task) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -44,6 +46,13 @@ class MainViewModel(
     fun deleteTask(task: Task) {
         viewModelScope.launch(Dispatchers.IO) {
             deleteTaskUseCase.invoke(task)
+        }
+    }
+
+    fun getMoneyCourse() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val moneyResult = getMoneyCourseUseCase.invoke()
+            _moneyCourse.postValue(moneyResult)
         }
     }
 

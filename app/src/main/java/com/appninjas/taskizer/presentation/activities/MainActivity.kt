@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         val sdf = SimpleDateFormat("HH")
         val currentTime = sdf.format(Date())
         binding.greetingText.text = getTime(currentTime)
+
         binding.addTaskBigBtn.setOnClickListener(testAddTaskBtnListener)
         viewModel.getTasksList()
         viewModel.taskList.observe(this@MainActivity) {
@@ -45,6 +46,15 @@ class MainActivity : AppCompatActivity() {
                 layoutManager = LinearLayoutManager(this@MainActivity)
             }
         }
+
+        viewModel.getMoneyCourse()
+        viewModel.moneyCourse.observe(this@MainActivity) {course ->
+            binding.apply {
+                dollarCourseTextView.text = course["dollar"]!!.course.toString()
+                euroCourseTextView.text = course["euro"]!!.course.toString()
+            }
+        }
+
     }
 
     private val testAddTaskBtnListener = View.OnClickListener {
@@ -58,6 +68,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.saveTask(taskObject)
             taskAdapter.tasksList.add(taskObject)
             taskAdapter.notifyDataSetChanged()
+            binding.taskTextEditText.text = SpannableStringBuilder("")
         } else {
             Toast.makeText(this@MainActivity, "Введите текст задачи", Toast.LENGTH_SHORT).show()
         }
