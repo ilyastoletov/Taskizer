@@ -1,2 +1,10 @@
-# Taskizer
-Simple to-do app made on Kotlin with using following tech stack: Coroutines, MVVM, Clean Architecture, Room, Koin for DI
+## Taskizer
+### Идея 
+Простое to-do приложение, проект создан для практики одной из библиотек. Помимо функционала to-do есть также курс фиатных валют
+### Функционал
+- Создание, завершение, удаление задачи
+- Актуальный курс валют
+### Стек
+ЯП: Kotlin
+IDE: Android Studio
+Библиотеки: Retrofit2, MVVM, RecyclerView, Room, Koin (DI)
